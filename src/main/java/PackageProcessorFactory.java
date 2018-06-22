@@ -6,6 +6,7 @@ import com.yada.sdk.packages.transaction.IMessage;
 import com.yada.sdk.packages.transaction.IPacker;
 import com.yada.sdk.packages.transaction.jpos.JposPacker;
 import org.jpos.iso.ISOException;
+import org.jpos.iso.ISOUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,16 +20,10 @@ public class PackageProcessorFactory implements IPackageProcessorFactory {
         return new IPackageProcessor() {
             @Override
             public void proc(DataTransceiversContext context) {
-                ByteBuffer buffer = context.getData();
                 try {
-                    InputStream is = new FileInputStream(new File("8583gpos.xml"));
-                    IPacker packer = new JposPacker(11, is, "gis");
-                    IMessage message = packer.unpack(buffer);
-                    System.out.println(message.getFieldString(0));
-
-                    buffer.flip();
-                    context.getDataTransceivers().send(buffer);
-                } catch (InterruptedException | FileNotFoundException | ISOException | PackagingException e) {
+                    System.out.println("req:" + ISOUtil.byte2hex(context.getData().array()));
+                    context.getDataTransceivers().send(context.getData());
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }

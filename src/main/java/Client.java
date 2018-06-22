@@ -26,15 +26,13 @@ public class Client {
         JposPacker packer = new JposPacker(11, is, "gis");
 
         String data = "60006582A261010003040106207020068108C082191662109470000000130000000000000000110067490520000100080104170230363134303934343832393837363030323432353130343736373031313030303030363730323039319F3303E049C8950508000810009F3704ED5D0FEA9F1E0832383939373334359F101307000103602010010A010000000000642959439F26086088555B13AA10B19F3602046382027C00DF310520000000009F1A0207029A03180614001300000043951500001600004300674806143935424541363739";
-        byte[] bytes = ISOUtil.hex2byte(data);
-        ByteBuffer reqBuffer = ByteBuffer.allocate(bytes.length).put(bytes);
-        reqBuffer.flip();
+        ByteBuffer reqBuffer = ByteBuffer.wrap(ISOUtil.hex2byte(data));
         IMessage req = packer.unpack(reqBuffer);
-        System.out.println(req.toString());
+        System.out.println("req:" + req.toString());
 
         ByteBuffer respBuffer = client.send(packer.pack(req));
         IMessage resp = packer.unpack(respBuffer);
-        System.out.println(resp.toString());
+        System.out.println("resp:" + resp.toString());
 
         client.close();
     }
