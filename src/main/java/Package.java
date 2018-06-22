@@ -3,6 +3,7 @@ import com.yada.sdk.packages.transaction.IMessage;
 import com.yada.sdk.packages.transaction.IPacker;
 import com.yada.sdk.packages.transaction.jpos.JposPacker;
 import org.jpos.iso.ISOException;
+import org.jpos.iso.ISOUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -20,7 +21,7 @@ public class Package {
             if (line % 2 == 0) {
                 data = data.substring(4);
             }
-            ByteBuffer buffer = ByteBuffer.wrap(HexTools.toByteArray(data));
+            ByteBuffer buffer = ByteBuffer.wrap(ISOUtil.hex2byte((data)));
             IMessage message = packer.unpack(buffer);
             StringBuilder sb = new StringBuilder()
                     .append(line).append("->")
